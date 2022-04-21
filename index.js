@@ -60,3 +60,76 @@ _.set(bar, 'foo.items[0]', 'An item')
 // bar => { foo: { key: "foo", items: ["An item"] } }
 var name = _.get(bar, 'name', 'John Doe')
 // name => John Doe
+
+// 6. _.deburr
+// It’s a good habit to deburr text for a search function when there is internationalization and localization.
+
+_.deburr('déjà vu')
+// -> deja vu
+_.deburr('Juan José')
+// -> Juan Jose
+
+// 7. _.keyBy
+// Anytime a server returns an object collection as an array, this function can help you organize it. The second argument can also be a function.
+
+var posts = [
+  { id: '1abc', title: 'First blog post', content: '...' },
+  { id: '2abc', title: 'Second blog post', content: '...' },
+  // more blog posts
+  { id: '34abc', title: 'The blog post we want', content: '...' }
+  // even more blog posts
+]
+
+posts = _.keyBy(posts, 'id')
+
+var post = posts['34abc']
+// post -> { id: "34abc", title: "The blog post we want", content: "..." }
+
+// 8. _.reduce
+// _.reduce is a little bit like a filter function. The only difference is that you can choose the form of the returned object.
+var users = [
+  { name: 'John', age: 30 },
+  { name: 'Jane', age: 28 },
+  { name: 'Bill', age: 65 },
+  { name: 'Emily', age: 17 },
+  { name: 'Jack', age: 30 }
+]
+
+var reducedUsers = _.reduce(
+  users,
+  function (result, user) {
+    if (user.age >= 18 && user.age <= 59) {
+      ;(result[user.age] || (result[user.age] = [])).push(user)
+    }
+
+    return result
+  },
+  {}
+)
+
+// reducedUsers -> {
+//     28: [{ name: "Jane", age: 28 }],
+//     30: [{ name: "John", age: 30 }, { name: "Jack", age: 30 }]
+// }
+
+// 9.  _.cloneDeep
+// After the hardest one, the easiest one. _.cloneDeep will clone an object.
+
+var original = { foo: 'bar' }
+var copy = original
+copy.foo = 'new value'
+// copy -> { foo: "new value" } Yeah!
+// original -> { foo: "new value" } Oops!
+
+var original = { foo: 'bar' }
+var copy = _.cloneDeep(original)
+copy.foo = 'new value'
+// copy -> { foo: "new value" } Yeah!
+// original -> { foo: "bar" } Yeah!
+
+// 10. _. sortedUniq
+// With this one, all duplicated values won’t be returned. This is usually used for performance reasons, because it is specifically for the sorted arrays.
+
+var sortedArray = [1, 1, 2, 3, 3, 3, 5, 8, 8]
+var result = _.sortedUniq(sortedArray)
+// -> [1, 2, 3, 5, 8]
